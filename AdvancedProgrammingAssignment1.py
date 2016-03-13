@@ -20,6 +20,21 @@ class Model():
         data = [[4, 'm', 22, 5000, 22, 50000], [2, 'f', 33, 1000, 50, 30000]]
         return data
 
+    def load_file():
+        with open("datafile.txt") as f:
+            data = f.read()
+            print( data)
+
+    def save_file():
+        with open('datafile.txt', 'w') as f:
+            f.write('input data')
+
+
+    def get_data_values_from_file():
+        pass
+
+
+
 class View():
     pass
     def display_header(headers):
@@ -45,24 +60,28 @@ class Controller(Cmd):
         View.display_header(Model.get_data_header())
         View.display_data(Model.get_data_values())
 
+    def do_load_file(self, file):
+        Model.load_file()
+
     def do_quit(self, args):
+        """
+        Quit from CMD
+        """
         print('Quitting...')
         raise SystemExit
+
+    do_q = do_quit
 
 
 
 
 def main():
-    #print('this is the advanced programming assignment 1')
-    name = "phil"
-    #Controller.do_greet()
-    #View.display_header(Model.get_data_header())
-    #View.display_data(Model.get_data_values())
+    print("Hello, welcome to the SalesPerson Data App")
 
-if __name__ == '__main__':
+if __name__ == '__main__': #tells which is main function
     main()
     controller = Controller()
-    controller.prompt = '> '
+    controller.prompt = ':) '
     controller.cmdloop('Starting prompt...')
 
 
