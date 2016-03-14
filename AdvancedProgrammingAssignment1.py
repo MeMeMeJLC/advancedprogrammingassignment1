@@ -19,9 +19,14 @@ class Model():
         return headers
 
     def get_data_values():
-        with open('datafile.pickle', 'r+b') as f:
-            data = pickle.load(f)
-        return data
+        file = input('Enter file name:')
+        print('file name choosen is: ' + file)
+        try:
+            with open(file + '.pickle', 'r+b') as f:
+                data = pickle.load(f)
+            raise file_error('File name not valid')
+        finally:
+            return data
 
     def write_id(id):
         match_id = re.match('[A-Z][0-9]{3}', id)
@@ -96,10 +101,22 @@ class View():
 class Controller(Cmd):
 
     def do_show_data(self, header):
+        """
+        method do_show_data
+        :param self:
+        :param header:
+        :return The column names, and the rows of values in raw form:
+        """
         View.display_header(Model.get_data_header())
         View.display_data(Model.get_data_values())
 
     def do_write_data(self, args):
+        """
+        method docstring
+        :param self:
+        :param args:
+        :Where you create and serialise the input data :
+        """
         pass
         print('enter the following data')
         id = input('please enter ID no: (format eg: A001 to Z999)')
@@ -116,20 +133,32 @@ class Controller(Cmd):
         income = Model.write_income(income)
         array = [id, gender, age, sales, bmi, income]
         print(array)
-        with open('datafile.pickle', 'rb') as f:
+        file = input('Enter file name:')
+        print('file name choosen is: ' + file)
+        with open(file + '.pickle', 'rb') as f:
             data = pickle.load(f)
-        with open('datafile.pickle', 'wb') as f: #(w)rite(b)inary
+        with open(file + '.pickle', 'wb') as f: #(w)rite(b)inary
             pickle.dump(str(array) + ', ' + data, f)
 
 
     def do_delete_data(self, args):
-        with open('datafile.pickle', 'wb') as f: #(w)rite(b)inary
+        """
+        method do_delete_data
+        :param self:
+        :param args:
+        :Deletes all data in the file:
+        """
+        file = input('Enter file name:')
+        print('file name choosen is: ' + file)
+        with open(file + '.pickle', 'wb') as f: #(w)rite(b)inary
             pickle.dump("", f)
             print("data deleted")
 
     def do_load_data(self, file):
         #Model.load_file()
-        with open('datafile.pickle', 'r+b') as f:
+        file = input('Enter file name:')
+        print('file name choosen is: ' + file)
+        with open(file + '.pickle', 'r+b') as f:
             data = pickle.load(f)
             print(data)
 
