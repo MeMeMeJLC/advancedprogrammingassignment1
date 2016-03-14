@@ -9,6 +9,8 @@
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 from cmd import Cmd
+import pickle
+import re
 
 class Model():
 
@@ -16,24 +18,58 @@ class Model():
         headers = ['id', 'gender', 'age', 'sales', 'bmi', 'income']
         return headers
 
-    def get_data_values():
-        data = [[4, 'm', 22, 5000, 22, 50000], [2, 'f', 33, 1000, 50, 30000]]
-        return data
+    def write_id(id):
+        match_id = re.match('[A-Z][0-9]{3}', id)
+        if match_id == None:
+            print('id format incorrect: id entered as X000')
+            new_id = 'X000'
+            print(new_id)
+            return(new_id)
+        else:
+            return id
 
-    def load_file():
-        with open("datafile.txt") as f:
-            data = f.read()
-            print( data)
+    def write_gender(gender):
+        match_gender = re.match('(M|F)', gender)
+        if match_gender == None:
+            print('gender format incorrect:  entered as F')
+            gender = 'F'
+            return gender
+        else:
+            return gender
 
-    def save_file():
-        with open('datafile.txt', 'w') as f:
-            f.write('input data')
+    def write_age(age):
+        match_age = re.match('[0-9]{2}', age)
+        if match_age == None:
+            print('age format incorrect:  entered as 20')
+            age = '20'
+            return age
+        else:
+            return age
 
+    def write_sales(sales):
+        match_sales = re.match('[0-9]{3}', sales)
+        if match_sales == None:
+            print('sales format incorrect:  entered as 000')
+            sales = '000'
+            return sales
+        else:
+            return sales
 
-    def get_data_values_from_file():
-        pass
+    def write_bmi(bmi):
+        match_bmi = re.match('(Normal|Overweight|Obesity|Underweight)', bmi)
+        if match_bmi == None:
+            print('bmi format incorrect:  entered as Normal')
+            bmi = 'Normal'
+            return bmi
+        else:
+            return bmi
 
-
+    def write_income(income):
+        match_income = re.match('[0-9]{2,3}', income)
+        if match_income == None:
+            print('income format incorrect:  entered as 00')
+            income = '00'
+            return income
 
 class View():
     pass
@@ -52,16 +88,39 @@ class View():
                 print(item, end='   |')
 
 class Controller(Cmd):
-    pass
-    def do_greet(self, person):
-        print('hello ' + person)
 
     def do_show_data(self, header):
         View.display_header(Model.get_data_header())
         View.display_data(Model.get_data_values())
 
-    def do_load_file(self, file):
-        Model.load_file()
+    def do_write_data(self, args):
+        pass
+        print('enter the following data')
+        id = input('please enter ID no: (format eg: A001 to Z999)')
+        id = Model.write_id(id)
+        gender = input('please enter gender: (format eg: M or F)')
+        gender = Model.write_gender(gender)
+        age = input('please enter age: (format eg: 01 to 99)')
+        age = Model.write_age(age)
+        sales = input('please enter sales: (format eg: 3 numbers only')
+        sales = Model.write_sales(sales)
+        bmi = input('please enter bmi: (format eg: Underweight, Normal, Overweight or Obesity')
+        bmi = Model.write_bmi(bmi)
+        income = input('please enter income: (format eg: 2 or 3 digits')
+        income = Model.write_income(income)
+        array = [id, gender, age, sales, bmi, income]
+        print(array)
+        with open('datafile.pickle', 'rb') as f:
+            data = pickle.load(f)
+        with open('datafile.pickle', 'wb') as f: #(w)rite(b)inary
+            pickle.dump(str(array) + ', ' + data, f)
+
+
+    def do_load_data(self, file):
+        #Model.load_file()
+        with open('datafile.pickle', 'r+b') as f:
+            data = pickle.load(f)
+            print(data)
 
     def do_quit(self, args):
         """
