@@ -1,7 +1,7 @@
 from cmd import Cmd
 import pickle
 import re
-
+import doctest
 
 class Model():
 
@@ -19,7 +19,8 @@ class Model():
         finally:
             return data
 
-    def write_id(id):
+    def validate_id(id):
+        #id = input('please enter ID no: (format eg: A001 to Z999)')
         match_id = re.match('[A-Z][0-9]{3}', id)
         if match_id is None:
             print('id format incorrect: id entered as X000')
@@ -29,7 +30,7 @@ class Model():
         else:
             return id
 
-    def write_gender(gender):
+    def validate_gender(gender):
         match_gender = re.match('(M|F)', gender)
         if match_gender is None:
             print('gender format incorrect:  entered as F')
@@ -38,7 +39,7 @@ class Model():
         else:
             return gender
 
-    def write_age(age):
+    def validate_age(age):
         match_age = re.match('[0-9]{2}', age)
         if match_age is None:
             print('age format incorrect:  entered as 20')
@@ -47,7 +48,7 @@ class Model():
         else:
             return age
 
-    def write_sales(sales):
+    def validate_sales(sales):
         match_sales = re.match('[0-9]{3}', sales)
         if match_sales is None:
             print('sales format incorrect:  entered as 000')
@@ -56,7 +57,7 @@ class Model():
         else:
             return sales
 
-    def write_bmi(bmi):
+    def validate_bmi(bmi):
         match_bmi = re.match('(Normal|Overweight|Obesity|Underweight)', bmi)
         if match_bmi is None:
             print('bmi format incorrect:  entered as Normal')
@@ -65,7 +66,7 @@ class Model():
         else:
             return bmi
 
-    def write_income(income):
+    def validate_income(income):
         match_income = re.match('[0-9]{2,3}', income)
         if match_income is None:
             print('income format incorrect:  entered as 00')
@@ -109,29 +110,35 @@ class Controller(Cmd):
         :param args:
         :Where you create and serialise the input data :
         """
-        pass
-        print('enter the following data')
-        id = input('please enter ID no: (format eg: A001 to Z999)')
-        id = Model.write_id(id)
-        gender = input('please enter gender: (format eg: M or F)')
-        gender = Model.write_gender(gender)
-        age = input('please enter age: (format eg: 01 to 99)')
-        age = Model.write_age(age)
-        sales = input('please enter sales: (format eg: 3 numbers only')
-        sales = Model.write_sales(sales)
-        bmi = input
-        ('please enter bmi: (eg: Underweight, Normal, Overweight or Obesity')
-        bmi = Model.write_bmi(bmi)
-        income = input('please enter income: (format eg: 2 or 3 digits')
-        income = Model.write_income(income)
+
+        id = input("enter id")
+        gender = input("gender")
+        age = input("age")
+        sales = input("sales")
+        bmi = input("bmi")
+        income = input("income")
+        filename = input("filename")
+
+        id = Model.validate_id(id)
+        gender = Model.validate_gender(gender)
+        age = Model.validate_age(age)
+        sales = Model.validate_sales(sales)
+        bmi = Model.validate_bmi(bmi)
+        income = Model.validate_income(income)
         array = [id, gender, age, sales, bmi, income]
         print(array)
-        file = input('Enter file name:')
-        print('file name choosen is: ' + file)
-        with open(file + '.pickle', 'rb') as f:
-            data = pickle.load(f)
-        with open(file + '.pickle', 'wb') as f:
-            pickle.dump(str(array) + ', ' + data, f)
+
+        try:
+            print('file name choosen is: ' + filename)
+            with open(filename + '.pickle', 'rb') as f:
+                data = pickle.load(f)
+            with open(filename + '.pickle', 'wb') as f:
+                pickle.dump(str(array) + ', ' + data, f)
+        except NameError:
+            print("file name not found")
+            with open(filename + '.pickle', 'wb') as f:
+                pickle.dump(str(array), f)
+
 
     def do_delete_data(self, args):
         """
@@ -153,11 +160,14 @@ class Controller(Cmd):
         :param args:
         :Deletes all data in the file:
         """
-        file = input('Enter file name:')
+        file = file
         print('file name choosen is: ' + file)
         with open(file + '.pickle', 'r+b') as f:
             data = pickle.load(f)
             print(data)
+
+    def do_hello(self, person):
+        print('hello ' + person)
 
     def do_quit(self, args):
         """
@@ -174,6 +184,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
     controller = Controller()
     controller.prompt = ':) '
     controller.cmdloop('Starting prompt...')
