@@ -18,6 +18,11 @@ class Model():
         headers = ['id', 'gender', 'age', 'sales', 'bmi', 'income']
         return headers
 
+    def get_data_values():
+        with open('datafile.pickle', 'r+b') as f:
+            data = pickle.load(f)
+        return data
+
     def write_id(id):
         match_id = re.match('[A-Z][0-9]{3}', id)
         if match_id == None:
@@ -81,11 +86,12 @@ class View():
 
     def display_data(data):
         Model.get_data_values()
-        for item in data:
+        print(data)
+        """for item in data:
             i = data.index(item)
             print('', end='\n')
             for item in data[i]:
-                print(item, end='   |')
+                print(item, end='   |')"""
 
 class Controller(Cmd):
 
@@ -115,6 +121,11 @@ class Controller(Cmd):
         with open('datafile.pickle', 'wb') as f: #(w)rite(b)inary
             pickle.dump(str(array) + ', ' + data, f)
 
+
+    def do_delete_data(self, args):
+        with open('datafile.pickle', 'wb') as f: #(w)rite(b)inary
+            pickle.dump("", f)
+            print("data deleted")
 
     def do_load_data(self, file):
         #Model.load_file()
