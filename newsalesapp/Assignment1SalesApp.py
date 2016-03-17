@@ -31,14 +31,24 @@ class Model():
                     for element in raw_line_data.split():
                         if i == 0:
                             Model.id_list.append(element)
-                            #print(Model.id_list[i])
-                            print('i = ' and i)
                             print(Model.id_list)
                         elif i == 1:
                             Model.gender_list.append(element)
-                            #print(Model.gender_list[i])
-                            print('i = ' and i)
                             print(Model.gender_list)
+                        elif i == 2:
+                            Model.age_list.append(element)
+                            print(Model.age_list)
+                        elif i == 3:
+                            Model.sales_list.append(element)
+                            print(Model.sales_list)
+                        elif i == 4:
+                            Model.bmi_list.append(element)
+                            print(Model.bmi_list)
+                        elif i == 5:
+                            Model.income_list.append(element)
+                            print(Model.income_list)
+                        else:
+                            print("error in get_data() raw_line_data")
                         i += 1
 
 
