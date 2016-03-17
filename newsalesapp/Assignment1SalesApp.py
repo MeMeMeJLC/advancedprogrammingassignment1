@@ -32,7 +32,7 @@ class Model():
         >>> Model.gender_list[3]
         'F'
         """
-        filename = input("Enter the destination/filename. Eg: C:/data/load_data.txt")
+        filename = input("Enter the destination/filename. Eg: D:/data/load_data.txt")
         try:
             with open(filename, 'r') as f:
                 for line in f:
@@ -41,6 +41,7 @@ class Model():
                     i = 0;
                     for element in raw_line_data.split():
                         if i == 0:
+                            element = Model.validate_id(element)
                             Model.id_list.append(element)
                             print(Model.id_list)
                         elif i == 1:
@@ -66,6 +67,24 @@ class Model():
         except IOError:
             print("IO error, not reading file. Try entering the filename again")
             #Do_Get_Data()
+
+
+    def validate_id(id):
+        #id = input('please enter ID no: (format eg: A001 to Z999)')
+        """
+        Check bad data
+
+        >>> Model.id_list[1] is None
+        True
+        """
+        match_id = re.match('[A-Z][0-9]{3}', id)
+        if match_id is None:
+            print('id format incorrect: id entered as None')
+            id = None
+            print(id)
+            return(id)
+        else:
+            return id
 
 
 
