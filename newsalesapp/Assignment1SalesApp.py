@@ -27,16 +27,18 @@ class Model():
                 for line in f:
                     raw_line_data = f.readline()
                     print(raw_line_data)
-                    for element in raw_line_data:
-                        i = 0;
+                    i = 0;
+                    for element in raw_line_data.split():
                         if i == 0:
                             Model.id_list.append(element)
-                            print(Model.id_list[i])
+                            #print(Model.id_list[i])
                             print('i = ' and i)
+                            print(Model.id_list)
                         elif i == 1:
                             Model.gender_list.append(element)
-                            print(Model.gender_list[i])
+                            #print(Model.gender_list[i])
                             print('i = ' and i)
+                            print(Model.gender_list)
                         i += 1
 
 
