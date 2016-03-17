@@ -22,11 +22,22 @@ class Model():
     income_list = list()
 
     def get_data():
+        """
+        Check correct data has entered list at correct index.
+        Happy day scenario.
+
+        >>> Model.id_list[1]
+        'A011'
+
+        >>> Model.gender_list[3]
+        'F'
+        """
+        filename = input("Enter the destination/filename. Eg: C:/data/load_data.txt")
         try:
-            with open('loadData_Good.txt', 'r') as f:
+            with open(filename, 'r') as f:
                 for line in f:
-                    raw_line_data = f.readline()
-                    print(raw_line_data)
+                    print("line = " and line)
+                    raw_line_data = line
                     i = 0;
                     for element in raw_line_data.split():
                         if i == 0:
@@ -53,7 +64,8 @@ class Model():
 
 
         except IOError:
-            print("IO error, not reading file")
+            print("IO error, not reading file. Try entering the filename again")
+            #Do_Get_Data()
 
 
 
@@ -73,3 +85,4 @@ if __name__ == '__main__':
     main()
 
 Model.get_data()
+doctest.testmod()
