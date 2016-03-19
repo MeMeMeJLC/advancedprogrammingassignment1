@@ -109,7 +109,7 @@ class Model():
         >>> Model.gender_list[1] is None
         True
 
-        #Raw input is " ", should return None because not a valid input.
+        #Raw input is " ", should return 0 because not a valid input.
         >>> Model.gender_list[6] is None
         True
 
@@ -127,16 +127,16 @@ class Model():
 
     def validate_age(age):
         """
-        #Raw input is "2", should return None as input is in
+        #Raw input is "2", should return 0 as input is in
         invalid format.
 
-        >>> Model.age_list[0] is None
+        >>> Model.age_list[0] is 0
         True
 
-        #Raw input is "1S", should return None as input has a
+        #Raw input is "1S", should return 0 as input has a
         non-int character in it.
 
-        >>> Model.age_list[7] is None
+        >>> Model.age_list[7] is 0
         True
 
         #Raw input is "60", should return "60" as it is valid.
@@ -146,24 +146,24 @@ class Model():
         """
         match_age = re.match('[0-9]{2}', age)
         if match_age is None or len(age) is not 2:
-            print('age format incorrect:  entered as None')
-            age = None
+            print('age format incorrect:  entered as 0')
+            age = 0
             return age
         else:
-            return age
+            return int(age)
 
     def validate_sales(sales):
         """
-        #Raw input is "54", should return None, because input in
+        #Raw input is "54", should return 0, because input in
         incorrect format.
 
-        >>> Model.sales_list[6] is None
+        >>> Model.sales_list[6] is 0
         True
 
-        #Raw input is "5554", should return None, because input is in
+        #Raw input is "5554", should return 0, because input is in
         incorrect format, too long
 
-        >>> Model.sales_list[7] is None
+        >>> Model.sales_list[7] is 0
         True
 
         #Raw input is "222", should return "222" as it's correct format
@@ -173,11 +173,11 @@ class Model():
         """
         match_sales = re.match('[0-9]{3}', sales)
         if match_sales is None or len(sales) is not 3:
-            print('sales format incorrect:  entered as None')
-            sales = None
+            print('sales format incorrect:  entered as 0')
+            sales = 0
             return sales
         else:
-            return sales
+            return int(sales)
 
     def validate_bmi(bmi):
         """
@@ -207,14 +207,14 @@ class Model():
 
     def validate_income(income):
         """
-        #Raw input is "8", should return None, incorrect format, only 1 number
+        #Raw input is "8", should return 0, incorrect format, only 1 number
 
-        >>> Model.income_list[2] is None
+        >>> Model.income_list[2] is 0
         True
 
-        #Raw input is " ", should return None as it is an empty field
+        #Raw input is " ", should return 0 as it is an empty field
 
-        >>> Model.income_list[3] is None
+        >>> Model.income_list[3] is 0
         True
 
         #Raw input is "999", should return "999" as is in correct format
@@ -228,27 +228,121 @@ class Model():
         """
         match_income = re.match('[0-9]{2,3}', income)
         if match_income is None or len(income) > 3:
-            print('income format incorrect:  entered as None')
-            income = None
+            print('income format incorrect:  entered as 0')
+            income = 0
             return income
         else:
-            return income
+            return int(income)
 
 class View():
     pass
 
-    def bar_graph(x, y):
+    """ def scatter_plot(x, xName, y, yName):
 
         arrayX = np.array(x)
         arrayY = np.array(y)
 
-        plt.plot(x, y, label="loaded from file")
+        plt.bar(x, y)
 
         plt.xlabel('x')
         plt.ylabel('y')
         plt.title('Interesting graph\nCheck it out')
         plt.legend()
+        plt.show()"""
+
+    def pie_chart_gender():
+        m_count = 0
+        f_count = 0
+        all_valid_count = 0
+        for element in Model.gender_list:
+            #print(element)
+            if element == 'F':
+                #print("F called")
+                f_count += 1
+                all_valid_count += 1
+            elif element == 'M':
+                m_count += 1
+                all_valid_count += 1
+        #print("m_count: " + str(m_count) + ", f_count: " + str(f_count) + "allval: " + str(all_valid_count))
+        try:
+            m_percentage = m_count / all_valid_count * 100
+        except ZeroDivisionError:
+            m_percentage = 0
+        try:
+            f_percentage = f_count / all_valid_count * 100
+        except ZeroDivisionError:
+            f_percentage = 0
+
+        labels = 'Female', 'Male'
+        sizes = f_percentage, m_percentage
+        colors = 'pink', 'blue'
+
+        plt.title('Employee Gender Percentages')
+        plt.pie(sizes, labels=labels, colors=colors,
+        autopct='%1.1f%%', shadow=True, startangle=90)
+        plt.axis('equal')
         plt.show()
+
+    def pie_chart_bmi():
+        obesity_count = 0
+        overweight_count = 0
+        normal_count = 0
+        underweight_count = 0
+        all_valid_count = 0
+
+        for element in Model.bmi_list:
+            if element == 'Obesity':
+                print('ob')
+                obesity_count += 1
+                all_valid_count +=1
+            elif element == 'Overweight':
+                print('ov')
+                overweight_count += 1
+                all_valid_count += 1
+            elif element == 'Normal':
+                print('norm')
+                normal_count += 1
+                all_valid_count += 1
+            elif element == 'Underweight':
+                print('und')
+                underweight_count += 1
+                all_valid_count += 1
+
+
+
+        try:
+            ob_percent = obesity_count / all_valid_count * 100
+            print('obese ' + str(ob_percent))
+        except ZeroDivisionError:
+            ob_percent = 0
+        try:
+            ov_percent = overweight_count / all_valid_count * 100
+            print('over ' + str(ov_percent))
+        except ZeroDivisionError:
+            ov_percent = 0
+        try:
+            norm_percent = normal_count / all_valid_count * 100
+            print('norm ' + str(norm_percent))
+        except ZeroDivisionError:
+            norm_percent = 0
+        try:
+            und_percent = underweight_count / all_valid_count * 100
+            print("und " + str(und_percent) + ' ' + str(underweight_count))
+        except ZeroDivisionError:
+            und_percent = 0
+
+        print(all_valid_count)
+        labels = 'Obesity', 'Overweight', 'Normal', 'Underweight'
+        sizes = ob_percent, ov_percent, norm_percent, und_percent
+        colors = 'red', 'orange', 'green', 'orange'
+
+        plt.title("Percentage of Employees in Each BMI Category")
+        plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%',
+        shadow=True, startangle=90)
+        plt.axis('equal')
+        plt.show()
+
+
 
 
 class Controller():
@@ -263,4 +357,7 @@ if __name__ == '__main__':
 
 Model.get_data()
 #doctest.testmod()
-View.bar_graph([1,2,3,4], [5,22,33,450])
+#View.scatter_plot(Model.income_list, Model.id_list, "id", "income")
+#View.scatter_plot( [1,2,3,4,5], [1,2,3,4,5], "id", "income")
+#View.pie_chart_gender()
+View.pie_chart_bmi()
