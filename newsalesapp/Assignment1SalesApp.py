@@ -1,17 +1,9 @@
-#-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
-#
-# Author:      jeremy
-#
-# Created:     17/03/2016
-# Copyright:   (c) jeremy 2016
-# Licence:     <your licence>
-#-------------------------------------------------------------------------------
 import cmd
 import pickle
 import re
 import doctest
+import matplotlib.pyplot as plt
+import numpy as np
 
 class Model():
     id_list = list()
@@ -245,6 +237,18 @@ class Model():
 class View():
     pass
 
+    def bar_graph(x, y):
+
+        arrayX = np.array(x)
+        arrayY = np.array(y)
+
+        plt.plot(x, y, label="loaded from file")
+
+        plt.xlabel('x')
+        plt.ylabel('y')
+        plt.title('Interesting graph\nCheck it out')
+        plt.legend()
+        plt.show()
 
 
 class Controller():
@@ -258,5 +262,5 @@ if __name__ == '__main__':
     main()
 
 Model.get_data()
-doctest.testmod()
-print(Model.income_list)
+#doctest.testmod()
+View.bar_graph([1,2,3,4], [5,22,33,450])
