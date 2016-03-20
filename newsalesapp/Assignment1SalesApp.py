@@ -402,8 +402,10 @@ class View():
 
 
 
-class Controller(cmd):
-    def do_load_file(self):
+class Controller(cmd.Cmd):
+
+
+    def do_load_file(self, args):
         """
         :method: load_file
         :description: Gets employee data from a text file. This method will
@@ -412,12 +414,21 @@ class Controller(cmd):
         F 32 300 Normal 500 - with each employee on a new line. Any invalid data
         will be inputted as 0 or None. Once this is run the data will be loaded
         and ready to analyse or save in pickle.
-        :param: self
+        :param: self, args
         :return: Data into correct format to be saved or analysed in the app.
         """
         Model.get_data()
 
-    def do_load_saved_file(param):
+    def do_save_data(self, args):
+        """
+        :method: save_data
+        :description: Saves data as a serialised file to access later.
+        :param: self, args
+        :return: Data saved in a serialised file
+        """
+        Model.serialise_data()
+
+    def do_load_saved_file(self, args):
         """
         :method: load_saved_file
         :description: If data has been saved previously it can be reloaded. This
@@ -427,7 +438,7 @@ class Controller(cmd):
         """
         Model.load_serialised_data()
 
-    def do_display_gender_data(self):
+    def do_display_gender_data(self, args):
         """
         :method: display_gender_data
         :description: If data has been loaded into the app it will show a pie
@@ -446,36 +457,36 @@ class Controller(cmd):
         else:
             View.pie_chart_gender()
 
-        def do_display_bmi_data(self):
-            """
-            :method: display_bmi_data
-            :description: If data has been loaded into the app it will show a pie
-            chart of the percentage of Obese, Overweight, Normal and Underweight
-            employees. If data has notalready been loaded the user will be
-            prompted to enter the location/filename of data to be loaded.
-            :param: self
-            :return: A pie chart of bmi categories of employees.
-            """
-            if not Model.bmi_list:
-                print("No data loaded, please enter data location")
-                Model.get_data()
-                if Model.bmi_list:
-                    View.pie_chart_bmi()
-            else:
+    def do_display_bmi_data(self, args):
+        """
+        :method: display_bmi_data
+        :description: If data has been loaded into the app it will show a pie
+        chart of the percentage of Obese, Overweight, Normal and Underweight
+        employees. If data has notalready been loaded the user will be
+        prompted to enter the location/filename of data to be loaded.
+        :param: self
+        :return: A pie chart of bmi categories of employees.
+        """
+        if not Model.bmi_list:
+            print("No data loaded, please enter data location")
+            Model.get_data()
+            if Model.bmi_list:
                 View.pie_chart_bmi()
+        else:
+            View.pie_chart_bmi()
 
-        def do_quit(self):
-            """
-            :method: quit
-            :description: Quit the application. Will prompt the user as to
-            whether the user would like to save the data serialised.
-            :param: self
-            :return: Will exit the app.
-            """
+    def do_quit(self, args):
+        """
+        :method: quit
+        :description: Quit the application. Will prompt the user as to
+        whether the user would like to save the data serialised.
+        :param: self
+        :return: Will exit the app.
+        """
 
-            print('Quitting...')
-            Model.serialise_data()
-            raise SystemExit
+        print('Quitting...')
+        Model.serialise_data()
+        raise SystemExit
 
 def main():
     pass
@@ -483,9 +494,13 @@ def main():
 if __name__ == '__main__':
     main()
 
-Model.get_data()
+controller = Controller( )
+controller.prompt = ':) '
+controller.cmdloop('Starting prompt...')
+
+#Model.get_data()
 #doctest.testmod()
 #View.scatter_plot(Model.income_list, Model.id_list, "id", "income")
 #View.scatter_plot( [1,2,3,4,5], [1,2,3,4,5], "id", "income")
 #View.pie_chart_gender()
-View.pie_chart_bmi()
+#View.pie_chart_bmi()
