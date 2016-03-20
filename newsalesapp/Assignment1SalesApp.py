@@ -66,6 +66,63 @@ class Model():
             #Do_Get_Data()
 
 
+    def serialise_data():
+        if id_list or gender_list or age_list or sales_list or bmi_list or income_list:
+            serialise_answer = input("Would you like to save this data? Y or N")
+            if serialise_answer == 'Y' or 'y':
+                serialise_location = input('Enter location/filename to save to: ')
+                try:
+                    with open(serialise_location + '.pickle', 'wb') as f:
+                        pickle.dump(str(array) + ', ' + data, f)
+                except OSError.FileExistsError:
+                    print('File already exists')
+                    overwrite = input("File already exists. Overwrite it? Y or N")
+                    if overwrite == 'Y' or 'y':
+                        with open(serialise_location + '.pickle', 'wb') as f:
+                            pickle.dump(str(array) + ', ' + data, f)
+
+    def load_serialised_data():
+        load_serial_data = input('Would you like to reload saved data? Y or N')
+        if load_serial_data == 'y' or 'Y':
+            serialise_location = input('Enter location/filename to save to: ')
+            try:
+                with open(serialise_location + '.pickle', 'rb') as f:
+                    data = pickle.load(f)
+            except OSError.FileNotFoundError:
+                    print('File not found. Try again')
+                    load_serialised_data()
+
+            for element in data.split():
+                    if i == 0:
+                        element = Model.validate_id(element)
+                        Model.id_list.append(element)
+                        #print(Model.id_list)
+                    elif i == 1:
+                        element = Model.validate_gender(element)
+                        Model.gender_list.append(element)
+                        #print(Model.gender_list)
+                    elif i == 2:
+                        element = Model.validate_age(element)
+                        Model.age_list.append(element)
+                        #print(Model.age_list)
+                    elif i == 3:
+                        element = Model.validate_sales(element)
+                        Model.sales_list.append(element)
+                        #print(Model.sales_list)
+                    elif i == 4:
+                        element = Model.validate_bmi(element)
+                        Model.bmi_list.append(element)
+                        #print(Model.bmi_list)
+                    elif i == 5:
+                        element = Model.validate_income(element)
+                        Model.income_list.append(element)
+                        #print(Model.income_list)
+                    else:
+                        print("error in get_data() raw_line_data")
+                    i += 1
+
+
+
     def validate_id(id):
         """
         test using loadData_Bad.txt.
@@ -345,9 +402,80 @@ class View():
 
 
 
-class Controller():
-    pass
+class Controller(cmd):
+    def do_load_file(self):
+        """
+        :method: load_file
+        :description: Gets employee data from a text file. This method will
+        prompt the user to enter the location/text file name. Text file must
+        contain lines of data (id gender age sales bmi income)like this - A111
+        F 32 300 Normal 500 - with each employee on a new line. Any invalid data
+        will be inputted as 0 or None. Once this is run the data will be loaded
+        and ready to analyse or save in pickle.
+        :param: self
+        :return: Data into correct format to be saved or analysed in the app.
+        """
+        Model.get_data()
 
+    def do_load_saved_file(param):
+        """
+        :method: load_saved_file
+        :description: If data has been saved previously it can be reloaded. This
+        is not for text files, but for serialised data.
+        :param: self
+        :return: Data reloaded from a previously saved file.
+        """
+        Model.load_serialised_data()
+
+    def do_display_gender_data(self):
+        """
+        :method: display_gender_data
+        :description: If data has been loaded into the app it will show a pie
+        chart of the percentage of Male and Female employees. If data has not
+        already been loaded the user will be prompted to enter the
+        location/filename of data to be loaded.
+        :param: self
+        :return: A pie chart of genders of employees
+        """
+
+        if not Model.gender_list:
+            print("No data loaded, please enter data location")
+            Model.get_data()
+            if Model.gender_list:
+                View.pie_chart_gender()
+        else:
+            View.pie_chart_gender()
+
+        def do_display_bmi_data(self):
+            """
+            :method: display_bmi_data
+            :description: If data has been loaded into the app it will show a pie
+            chart of the percentage of Obese, Overweight, Normal and Underweight
+            employees. If data has notalready been loaded the user will be
+            prompted to enter the location/filename of data to be loaded.
+            :param: self
+            :return: A pie chart of bmi categories of employees.
+            """
+            if not Model.bmi_list:
+                print("No data loaded, please enter data location")
+                Model.get_data()
+                if Model.bmi_list:
+                    View.pie_chart_bmi()
+            else:
+                View.pie_chart_bmi()
+
+        def do_quit(self):
+            """
+            :method: quit
+            :description: Quit the application. Will prompt the user as to
+            whether the user would like to save the data serialised.
+            :param: self
+            :return: Will exit the app.
+            """
+
+            print('Quitting...')
+            Model.serialise_data()
+            raise SystemExit
 
 def main():
     pass
