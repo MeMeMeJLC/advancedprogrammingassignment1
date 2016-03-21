@@ -66,6 +66,8 @@ class Model():
             print("IO error, not reading file. Try entering filename again")
 
     def serialise_data():
+
+        print("called serialise_data()")
         """
         toSerialiseList = ""
         for element in Model.id_list:
@@ -94,6 +96,8 @@ class Model():
         """
 
     def load_serialised_data():
+        print("called load serialised_data()")
+        """
         load_serial_data = input('Would you like to reload saved data? Y or N')
         if load_serial_data == 'y' or 'Y':
             serialise_location = input('Enter location/filename to save to: ')
@@ -128,6 +132,7 @@ class Model():
             except OSError.FileNotFoundError:
                     print('File not found. Try again')
                     load_serialised_data()
+            """
 
     def validate_id(id):
         """
