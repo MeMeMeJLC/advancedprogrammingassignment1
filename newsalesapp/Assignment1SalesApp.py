@@ -4,6 +4,12 @@ import re
 import doctest
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+
+
+class MyFileExistsError(Exception):
+    def __init__(self):
+        Exception.__init__(self, "file alreadys exists, try again with a different name or location")
 
 class Model():
     id_list = list()
@@ -12,6 +18,7 @@ class Model():
     sales_list = list()
     bmi_list = list()
     income_list = list()
+
 
     def get_data():
         """
@@ -67,19 +74,27 @@ class Model():
 
 
     def serialise_data():
-        if id_list or gender_list or age_list or sales_list or bmi_list or income_list:
-            serialise_answer = input("Would you like to save this data? Y or N")
-            if serialise_answer == 'Y' or 'y':
+        toSerialiseList = ""
+        for element in Model.id_list:
+            i = Model.id_list.index(element)
+            toSerialiseList = toSerialiseList + Model.id_list[i] + " " \
+            + Model.gender_list[i] + " " + str(Model.age_list[i]) + " " + \
+            str(Model.sales_list[i]) + " " + Model.bmi_list[i] + " " \
+            + str(Model.income_list[i]) + os.linesep
+        print(toSerialiseList)
+
+        if Model.id_list or Model.gender_list or Model.age_list or Model.sales_list or Model.bmi_list or Model.income_list:
                 serialise_location = input('Enter location/filename to save to: ')
                 try:
                     with open(serialise_location + '.pickle', 'wb') as f:
-                        pickle.dump(str(array) + ', ' + data, f)
-                except OSError.FileExistsError:
-                    print('File already exists')
+                        pickle.dump(str(toSerialiseList), f)
+                except MyFileExistsError:
                     overwrite = input("File already exists. Overwrite it? Y or N")
                     if overwrite == 'Y' or 'y':
                         with open(serialise_location + '.pickle', 'wb') as f:
-                            pickle.dump(str(array) + ', ' + data, f)
+                            pickle.dump(str(toSerialiseList), f)
+        else:
+            print("No data to save")
 
     def load_serialised_data():
         load_serial_data = input('Would you like to reload saved data? Y or N')
@@ -88,38 +103,42 @@ class Model():
             try:
                 with open(serialise_location + '.pickle', 'rb') as f:
                     data = pickle.load(f)
+                    for line in f:
+                        #print("line = " and line)
+                        raw_line_data = line
+                        i = 0;
+                        for element in raw_line_data.split():
+                            if i == 0:
+                                element = Model.validate_id(element)
+                                Model.id_list.append(element)
+                                #print(Model.id_list)
+                            elif i == 1:
+                                element = Model.validate_gender(element)
+                                Model.gender_list.append(element)
+                                #print(Model.gender_list)
+                            elif i == 2:
+                                element = Model.validate_age(element)
+                                Model.age_list.append(element)
+                                #print(Model.age_list)
+                            elif i == 3:
+                                element = Model.validate_sales(element)
+                                Model.sales_list.append(element)
+                                #print(Model.sales_list)
+                            elif i == 4:
+                                element = Model.validate_bmi(element)
+                                Model.bmi_list.append(element)
+                                #print(Model.bmi_list)
+                            elif i == 5:
+                                element = Model.validate_income(element)
+                                Model.income_list.append(element)
+                                #print(Model.income_list)
+                            else:
+                                print("error in get_data() raw_line_data")
+                            i += 1
             except OSError.FileNotFoundError:
                     print('File not found. Try again')
                     load_serialised_data()
-
-            for element in data.split():
-                    if i == 0:
-                        element = Model.validate_id(element)
-                        Model.id_list.append(element)
-                        #print(Model.id_list)
-                    elif i == 1:
-                        element = Model.validate_gender(element)
-                        Model.gender_list.append(element)
-                        #print(Model.gender_list)
-                    elif i == 2:
-                        element = Model.validate_age(element)
-                        Model.age_list.append(element)
-                        #print(Model.age_list)
-                    elif i == 3:
-                        element = Model.validate_sales(element)
-                        Model.sales_list.append(element)
-                        #print(Model.sales_list)
-                    elif i == 4:
-                        element = Model.validate_bmi(element)
-                        Model.bmi_list.append(element)
-                        #print(Model.bmi_list)
-                    elif i == 5:
-                        element = Model.validate_income(element)
-                        Model.income_list.append(element)
-                        #print(Model.income_list)
-                    else:
-                        print("error in get_data() raw_line_data")
-                    i += 1
+            #print(data)
 
 
 
@@ -485,7 +504,6 @@ class Controller(cmd.Cmd):
         """
 
         print('Quitting...')
-        Model.serialise_data()
         raise SystemExit
 
 def main():
