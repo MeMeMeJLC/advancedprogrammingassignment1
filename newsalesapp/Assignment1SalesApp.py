@@ -9,7 +9,9 @@ import os
 
 class MyFileExistsError(Exception):
     def __init__(self):
-        Exception.__init__(self, "file alreadys exists, try again with a different name or location")
+        Exception.__init__(self, "file alreadys exists, try again with a \
+        different name or location")
+
 
 class Model():
     id_list = list()
@@ -18,7 +20,6 @@ class Model():
     sales_list = list()
     bmi_list = list()
     income_list = list()
-
 
     def get_data():
         """
@@ -31,70 +32,66 @@ class Model():
         >>> Model.gender_list[3]
         'F'
         """
-        filename = input("Enter the destination/filename. Eg: D:/data/load_data.txt")
+        filename = input("Enter the destination/filename. \
+        Eg: D:/data/load_data.txt")
         try:
             with open(filename, 'r') as f:
                 for line in f:
-                    #print("line = " and line)
                     raw_line_data = line
-                    i = 0;
+                    i = 0
                     for element in raw_line_data.split():
                         if i == 0:
                             element = Model.validate_id(element)
                             Model.id_list.append(element)
-                            #print(Model.id_list)
                         elif i == 1:
                             element = Model.validate_gender(element)
                             Model.gender_list.append(element)
-                            #print(Model.gender_list)
                         elif i == 2:
                             element = Model.validate_age(element)
                             Model.age_list.append(element)
-                            #print(Model.age_list)
                         elif i == 3:
                             element = Model.validate_sales(element)
                             Model.sales_list.append(element)
-                            #print(Model.sales_list)
                         elif i == 4:
                             element = Model.validate_bmi(element)
                             Model.bmi_list.append(element)
-                            #print(Model.bmi_list)
                         elif i == 5:
                             element = Model.validate_income(element)
                             Model.income_list.append(element)
-                            #print(Model.income_list)
                         else:
                             print("error in get_data() raw_line_data")
                         i += 1
 
-
         except IOError:
-            print("IO error, not reading file. Try entering the filename again")
-            #Do_Get_Data()
-
+            print("IO error, not reading file. Try entering filename again")
 
     def serialise_data():
+        """
         toSerialiseList = ""
         for element in Model.id_list:
             i = Model.id_list.index(element)
             toSerialiseList = toSerialiseList + Model.id_list[i] + " " \
-            + Model.gender_list[i] + " " + str(Model.age_list[i]) + " " + \
-            str(Model.sales_list[i]) + " " + Model.bmi_list[i] + " " \
-            + str(Model.income_list[i]) + os.linesep
+                + Model.gender_list[i] + " " + str(Model.age_list[i]) + " " + \
+                str(Model.sales_list[i]) + " " + Model.bmi_list[i] + " " \
+                + str(Model.income_list[i]) + os.linesep
         print(toSerialiseList)
 
-        if Model.id_list or Model.gender_list or Model.age_list or Model.sales_list or Model.bmi_list or Model.income_list:
-                serialise_location = input('Enter location/filename to save to: ')
+        if Model.id_list or Model.gender_list or Model.age_list or \
+            Model.sales_list or Model.bmi_list or Model.income_list:
+                serialise_location = input('Enter location/filename to save \
+                    to: ')
                 try:
                     with open(serialise_location + '.pickle', 'wb') as f:
                         pickle.dump(str(toSerialiseList), f)
                 except MyFileExistsError:
-                    overwrite = input("File already exists. Overwrite it? Y or N")
+                    overwrite = input("File already exists. Overwrite it? \
+                        Y or N")
                     if overwrite == 'Y' or 'y':
                         with open(serialise_location + '.pickle', 'wb') as f:
                             pickle.dump(str(toSerialiseList), f)
         else:
             print("No data to save")
+        """
 
     def load_serialised_data():
         load_serial_data = input('Would you like to reload saved data? Y or N')
@@ -104,43 +101,33 @@ class Model():
                 with open(serialise_location + '.pickle', 'rb') as f:
                     data = pickle.load(f)
                     for line in f:
-                        #print("line = " and line)
                         raw_line_data = line
-                        i = 0;
+                        i = 0
                         for element in raw_line_data.split():
                             if i == 0:
                                 element = Model.validate_id(element)
                                 Model.id_list.append(element)
-                                #print(Model.id_list)
                             elif i == 1:
                                 element = Model.validate_gender(element)
                                 Model.gender_list.append(element)
-                                #print(Model.gender_list)
                             elif i == 2:
                                 element = Model.validate_age(element)
                                 Model.age_list.append(element)
-                                #print(Model.age_list)
                             elif i == 3:
                                 element = Model.validate_sales(element)
                                 Model.sales_list.append(element)
-                                #print(Model.sales_list)
                             elif i == 4:
                                 element = Model.validate_bmi(element)
                                 Model.bmi_list.append(element)
-                                #print(Model.bmi_list)
                             elif i == 5:
                                 element = Model.validate_income(element)
                                 Model.income_list.append(element)
-                                #print(Model.income_list)
                             else:
                                 print("error in get_data() raw_line_data")
                             i += 1
             except OSError.FileNotFoundError:
                     print('File not found. Try again')
                     load_serialised_data()
-            #print(data)
-
-
 
     def validate_id(id):
         """
@@ -176,8 +163,6 @@ class Model():
             return(id)
         else:
             return id
-
-
 
     def validate_gender(gender):
         """
@@ -310,6 +295,7 @@ class Model():
         else:
             return int(income)
 
+
 class View():
     pass
 
@@ -331,15 +317,12 @@ class View():
         f_count = 0
         all_valid_count = 0
         for element in Model.gender_list:
-            #print(element)
             if element == 'F':
-                #print("F called")
                 f_count += 1
                 all_valid_count += 1
             elif element == 'M':
                 m_count += 1
                 all_valid_count += 1
-        #print("m_count: " + str(m_count) + ", f_count: " + str(f_count) + "allval: " + str(all_valid_count))
         try:
             m_percentage = m_count / all_valid_count * 100
         except ZeroDivisionError:
@@ -355,7 +338,7 @@ class View():
 
         plt.title('Employee Gender Percentages')
         plt.pie(sizes, labels=labels, colors=colors,
-        autopct='%1.1f%%', shadow=True, startangle=90)
+                autopct='%1.1f%%', shadow=True, startangle=90)
         plt.axis('equal')
         plt.show()
 
@@ -370,7 +353,7 @@ class View():
             if element == 'Obesity':
                 print('ob')
                 obesity_count += 1
-                all_valid_count +=1
+                all_valid_count += 1
             elif element == 'Overweight':
                 print('ov')
                 overweight_count += 1
@@ -383,8 +366,6 @@ class View():
                 print('und')
                 underweight_count += 1
                 all_valid_count += 1
-
-
 
         try:
             ob_percent = obesity_count / all_valid_count * 100
@@ -414,15 +395,12 @@ class View():
 
         plt.title("Percentage of Employees in Each BMI Category")
         plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%',
-        shadow=True, startangle=90)
+                shadow=True, startangle=90)
         plt.axis('equal')
         plt.show()
 
 
-
-
 class Controller(cmd.Cmd):
-
 
     def do_load_file(self, args):
         """
@@ -430,9 +408,9 @@ class Controller(cmd.Cmd):
         :description: Gets employee data from a text file. This method will
         prompt the user to enter the location/text file name. Text file must
         contain lines of data (id gender age sales bmi income)like this - A111
-        F 32 300 Normal 500 - with each employee on a new line. Any invalid data
-        will be inputted as 0 or None. Once this is run the data will be loaded
-        and ready to analyse or save in pickle.
+        F 32 300 Normal 500 - with each employee on a new line. Any invalid
+        data will be inputted as 0 or None. Once this is run the data will be
+        loaded and ready to analyse or save in pickle.
         :param: self, args
         :return: Data into correct format to be saved or analysed in the app.
         """
@@ -450,8 +428,8 @@ class Controller(cmd.Cmd):
     def do_load_saved_file(self, args):
         """
         :method: load_saved_file
-        :description: If data has been saved previously it can be reloaded. This
-        is not for text files, but for serialised data.
+        :description: If data has been saved previously it can be reloaded.
+        This is not for text files, but for serialised data.
         :param: self
         :return: Data reloaded from a previously saved file.
         """
@@ -506,19 +484,13 @@ class Controller(cmd.Cmd):
         print('Quitting...')
         raise SystemExit
 
+
 def main():
     pass
 
 if __name__ == '__main__':
     main()
 
-controller = Controller( )
+controller = Controller()
 controller.prompt = ':) '
 controller.cmdloop('Starting prompt...')
-
-#Model.get_data()
-#doctest.testmod()
-#View.scatter_plot(Model.income_list, Model.id_list, "id", "income")
-#View.scatter_plot( [1,2,3,4,5], [1,2,3,4,5], "id", "income")
-#View.pie_chart_gender()
-#View.pie_chart_bmi()
